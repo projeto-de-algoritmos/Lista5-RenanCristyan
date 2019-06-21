@@ -74,11 +74,18 @@ def iterative_find_sequennce(matrix, x, y, gap, msmt):
 	x_list = []
 	y_list = []
 
-	while j != 0 or i != 0:
-		if x[j-1] == y[i-1]:
-			msm = 0
-		else:
+	while True:
+		if i == 0 and j == 0:
+			break
+
+		if i <= 1 or j <= 1:
 			msm = msmt
+		
+		else:	
+			if x[j-1] == y[i-1]:
+				msm = 0
+			else:
+				msm = msmt
 
 		option1 = msm + matrix[i-1][j-1]
 		option2 = gap + matrix[i-1][j]
@@ -119,7 +126,7 @@ def process_string(string):
 
 # Executa as funções auxiliares e exibe o resultaado
 def run(x, y, gap, msmt, show_matrix=False):
-	print('-'*50)
+	print('_'*50)
 
 	print('X = {}'.format(x))
 	print('Y = {}'.format(y))
@@ -139,7 +146,7 @@ def run(x, y, gap, msmt, show_matrix=False):
 
 	iterative_find_sequennce(matrix, x, y, gap, msmt)
 
-	print('-'*50)
+	print('_'*50)
 
 # Alguns exemplos
 run('CTACCG', 'TACATG', 2, 3)
@@ -147,4 +154,5 @@ run('TAG', 'AGT', 1, 2)
 run('ATCGGA', 'ATGC', 2, 3, show_matrix=True)
 run('STOP', 'TOPS', 1, 2)
 run('ATA', 'TATAT', 1, 2, show_matrix=True)
-run('GTAG', 'GATAGTTA', 2, 3, show_matrix=True)
+run('GGGGCCCCCGGGG', 'GCG', 1, 2, show_matrix=True)
+run('A', 'TTTGCACGTTT', 2, 3, show_matrix=True)
