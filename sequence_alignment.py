@@ -65,6 +65,44 @@ def find_sequence(matrix, x, y, gap, msmt, i, j):
 			  .format(x[j-1]))
 		find_sequence(matrix, x, y, gap, msmt, i, j-1)
 
+# Imprime a melhor sequencia encontrada de forma mais elegante
+# do que a versão recursiva (e na ordem correta)
+def iterative_find_sequennce(matrix, x, y, gap, msmt):
+	i = len(matrix) - 1
+	j = len(matrix[0]) - 1
+
+	x_list = []
+	y_list = []
+
+	while j != 0 or i != 0:
+		if x[j-1] == y[i-1]:
+			msm = 0
+		else:
+			msm = msmt
+
+		option1 = msm + matrix[i-1][j-1]
+		option2 = gap + matrix[i-1][j]
+		option3 = gap + matrix[i][j-1]
+		minimum = min(option1, option2, option3)
+
+		if minimum == option1:
+			x_list.append(x[j-1])
+			y_list.append(y[i-1])
+			i -= 1
+			j -= 1
+		elif minimum == option2:
+			x_list.append('-')
+			y_list.append(y[i-1])
+			i -= 1
+		else:
+			x_list.append(x[j-1])
+			y_list.append('-')
+			j -= 1
+
+	separator = ''
+	print('X =', separator.join(x_list[::-1]))
+	print('Y =', separator.join(y_list[::-1]))
+
 # Retorna o melhor valor, ou seja, o último elemento da matriz
 def best_value(matrix):
 	l = len(matrix) - 1
@@ -80,7 +118,7 @@ def process_string(string):
 	return p_string
 
 # Executa as funções auxiliares e exibe o resultaado
-def run(x, y, gap, msmt):
+def run(x, y, gap, msmt, show_matrix=False):
 	print('-'*50)
 
 	print('X = {}'.format(x))
@@ -88,25 +126,25 @@ def run(x, y, gap, msmt):
 	print('GAP = {}'.format(gap))
 	print('MISMATCH = {}'.format(msmt))
 
-	print('\nMatriz de subproblemas: ')
 	matrix = initialize_matrix(x, y, gap, msmt)
-	print(matrix)
+
+	if show_matrix:
+		print('\nMatriz de subproblemas: ')
+		print(matrix)
 
 	melhor_valor = best_value(matrix)
-	print('\nMelhor alinhamento com {} pontos:\n'
+
+	print('\nMelhor alinhamento com {} pontos:'
 		    .format(melhor_valor))
 
-	tam_x = len(x)
-	tam_y = len(y)
-	find_sequence(matrix, x, y, gap, msmt, tam_y, tam_x)
-
-	print('\n(X-Y)')
-	print('Ler de baixo para cima')
+	iterative_find_sequennce(matrix, x, y, gap, msmt)
 
 	print('-'*50)
 
 # Alguns exemplos
-run("CTACCG", "TACATG", 2, 3)
-run("TAG", "AGT", 1, 2)
-run("ATCGGA", "ATGC", 2, 3)
+run('CTACCG', 'TACATG', 2, 3)
+run('TAG', 'AGT', 1, 2)
+run('ATCGGA', 'ATGC', 2, 3, show_matrix=True)
 run('STOP', 'TOPS', 1, 2)
+run('ATA', 'TATAT', 1, 2, show_matrix=True)
+run('GTAG', 'GATAGTTA', 2, 3, show_matrix=True)
